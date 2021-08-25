@@ -1,24 +1,21 @@
-# todo
+# Microsoft Todo Clone
+A microsoft-todo-clone. I have developed this project without any css framework.
 
-## Project setup
-```
-npm install
-```
+# Live demo (firebase)
+https://todo-c518f.web.app/#
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+# Giph
+![Alt Text](https://media.giphy.com/media/EloK5affruM9NQzQvZ/giphy.gif)
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+# Technologies
+HTML&CSS,Vue.js, firebase
+
+
+# Status
+I am currently developing other sections of microsoft-todo.
+
+
