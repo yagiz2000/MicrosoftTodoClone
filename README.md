@@ -5,7 +5,7 @@ A microsoft-todo-clone. I have developed this project without any css framework.
 https://todo-c518f.web.app/#
 
 # Giph
-![Alt Text](https://media.giphy.com/gifs/EloK5affruM9NQzQvZ)
+![](https://giphy.com/gifs/EloK5affruM9NQzQvZ)
 
 
 
