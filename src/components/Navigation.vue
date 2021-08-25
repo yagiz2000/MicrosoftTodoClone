@@ -11,7 +11,7 @@
                         <div class="email">yagzceritoglu@gmail.com</div>
                     </div>
                     <span class="icon-2"><i class="fas fa-search"></i></span>
-                    <div class="email-toggle" v-click-outside="outsideClickEmailToggler" :style="[showEmailToggle?{'display': 'block'}: {'display': 'none'}]">
+                    <div class="email-toggle"  :style="[showEmailToggle?{'display': 'block'}: {'display': 'none'}]">
                         <ul>
                             <li >
                                 <span class="icon"><i class="fas fa-user-cog"></i></span>
@@ -30,23 +30,23 @@
                         </ul>
                     </div>
                 </li>
-                <li @click="changeActiveListItem(0)" :style="{'--bgColor':'#7388DA'}" :class="{'active':listNumber ===0}">
+                <li @click="changeActiveListItem(0,'Günüm')" :style="{'--bgColor':'#7388DA'}" :class="{'active':listNumber ===0}">
                     <span class="icon"><i class="fas fa-sun"></i></span>
                     <span class="title">Günüm</span>
                 </li>
-                <li  @click="changeActiveListItem(1)" :style="{'--bgColor':'#D35D58'}" :class="{'active':listNumber ===1}" >
+                <li  @click="changeActiveListItem(1,'Önemli')" :style="{'--bgColor':'#D35D58'}" :class="{'active':listNumber ===1}" >
                     <span class="icon"><i class="fas fa-star"></i></span>
                     <span class="title">Önemli</span>
                 </li>
-                <li @click="changeActiveListItem(2)" :style="{'--bgColor':'#39916A'}" :class="{'active':listNumber ===2}" >
+                <li @click="changeActiveListItem(2,'Planlanan')" :style="{'--bgColor':'#39916A'}" :class="{'active':listNumber ===2}" >
                     <span class="icon"><i class="fas fa-calendar-alt"></i></span>
                     <span class="title">Planlanan</span>
                 </li>
-                <li @click="changeActiveListItem(3)" :style="{'--bgColor':'#7388DA'}" :class="{'active':listNumber ===3}" >
+                <li @click="changeActiveListItem(3,'Bana atanmış')" :style="{'--bgColor':'#7388DA'}" :class="{'active':listNumber ===3}" >
                     <span class="icon"><i class="fas fa-user"></i></span>
                     <span class="title">Bana atanmış</span>
                 </li>
-                <li @click="changeActiveListItem(4)" :style="{'--bgColor':'#7388DA'}" :class="{'active':listNumber ===4}" >
+                <li @click="changeActiveListItem(4,'Görevler')" :style="{'--bgColor':'#7388DA'}" :class="{'active':listNumber ===4}" >
                     <span class="icon"><i class="fas fa-home"></i></span>
                     <span class="title">Görevler</span>
                 </li>
@@ -68,7 +68,6 @@
 import { ref, computed } from 'vue';
 /* import useMixin from "../mixin/mixin";
  */import {useStore} from "vuex";
-import ClickOutside from 'vue-click-outside';
 
 export default {
     
@@ -76,8 +75,7 @@ export default {
         let showEmailToggle = ref(false);
         const sideBar = ref(null);
         let listNumber = ref(0);
-/*         const {toggle} = useMixin();
- */        let navigation = ref("navigation")
+        let navigation = ref("navigation")
         const store = useStore();
         const deger2 = computed(()=>{return store.getters.resHamBtn});
         function toggleSideBar(){
@@ -90,15 +88,14 @@ export default {
             console.log("saaaaaaa");
             showEmailToggle.value = false;
         }
-        function changeActiveListItem (num){
+        function changeActiveListItem (num,name){
             listNumber.value = num;
+            store.commit("changePageContent",name);
         }
         return{toggleSideBar,sideBar,deger2,navigation,showEmailToggle,openEmailToggler,outsideClickEmailToggler,listNumber,changeActiveListItem}
         
     },
-    directives:{
-        ClickOutside
-    }
+
 
 }
 </script>

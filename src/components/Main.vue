@@ -21,7 +21,6 @@
                     <div class="item">
                         <span class="icon"><i class="fas fa-calendar-day"></i></span>
                         <span class="text">Son tarihi bugün</span>
-
                     </div>
                     <div class="item">
                         <span class="icon"><i class="far fa-calendar-minus"></i></span>
@@ -46,7 +45,7 @@
                     <div class="days-info">
                         <ul>
                             <li id="responsiveButton"  @click="toggleSideBar()"><i class="fas fa-bars"></i></li>
-                            <li><h3>Günüm</h3></li>
+                            <li><h3>{{pageHeader}}</h3></li>
                             <li><p>{{getDay()}}</p></li>
                         </ul>
                     </div>
@@ -128,8 +127,9 @@
                                     
                                 </div>
                                 
-                                <div class="favIcon">
-                                    <i class="far fa-star"></i>
+                                <div class="favIcon" @click="makeItFav(todo)">
+                                    <i v-if="!todo.isFav" class="far fa-star"></i>
+                                    <i v-else style="color:#4559aa" class="fas fa-star"></i>
                                 </div>
                             </div>
                         </li>
@@ -156,8 +156,10 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="favIcon">
-                                        <i class="far fa-star"></i>
+                                    <div class="favIcon" @click="makeItFav(todo)">
+                                        <i v-if="!todo.isFav" class="far fa-star"></i>
+                                        <i v-else style="color:#4559aa" class="fas fa-star"></i>
+
                                     </div>
                                 </div>
                             </li>
@@ -232,6 +234,7 @@ export default {
         let defaultTodos = computed(()=>{return store.getters.getDefaultTodos})
         let completedTodos = computed(()=>{return store.getters.getCompletedTodos})
         const deger = computed(()=>{return store.getters.resHamBtn})
+        let pageHeader = computed(()=>{return store.getters.getPage})
         function getDay(){
             let days = ["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
             let months = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"]
@@ -268,7 +271,8 @@ export default {
             const data = {
                 createdAt:new Date(),
                 content:inputValue.value,
-                completed:false
+                completed:false,
+                isFav:false
             }
             store.commit("addTodos",data);
             inputValue.value = "";
@@ -343,7 +347,11 @@ export default {
             let payload={type:"defaultTodos",todo:selectedTodoByRighClk.value};
             store.commit("removeTodo",payload);
         }
-        return{toggleSideBar,deger,toggle,inputValue,showInputLabels,inputStyling,showCompletedTodos,showTodos,toggleOutside,addTodo,defaultTodos,changeCompletedStatus,completedTodos,getDay,openToggleMenu,toggleMenu,toggleSide,toggleSideShow,opentToggleSideMenu,changeBg,backGroundColor,boxIndex,openContextMenu,closeContext,removeTodo,selectedTodoByRighClk}
+        function makeItFav(todo){
+            let payload={type:"defaultTodos",todo};
+            store.commit("changeFavStatus",payload)
+        }
+        return{toggleSideBar,deger,toggle,inputValue,showInputLabels,inputStyling,showCompletedTodos,showTodos,toggleOutside,addTodo,defaultTodos,changeCompletedStatus,completedTodos,getDay,openToggleMenu,toggleMenu,toggleSide,toggleSideShow,opentToggleSideMenu,changeBg,backGroundColor,boxIndex,openContextMenu,closeContext,removeTodo,selectedTodoByRighClk,makeItFav,pageHeader}
     },
     directives:{
         ClickOutside
@@ -588,7 +596,7 @@ export default {
     border-radius: 5px;
     height:35px;
     min-height: 35px;
-    margin-bottom: 95px;
+    margin-bottom: 40px;
     width: 140px;
     padding: 5px;
 }
@@ -667,6 +675,9 @@ export default {
     background-color: white;
     width: 100%;
     height: 60px;
+}
+.main .content .middle ul li .todo .infoSection .text{
+    left: 44px;
 }
 .main .content .middle ul li .todo .infoSection .text p.done{
     text-decoration: line-through;

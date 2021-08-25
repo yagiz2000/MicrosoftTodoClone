@@ -6,6 +6,7 @@ const store = createStore({
       resHamBtn: false,
       defaultTodos:Storage.getTodos("defaultTodos"),
       completedTodos:Storage.getCompletedTodos("defaultTodos"),
+      page:"Günüm",
     }
   },
   getters: {
@@ -17,6 +18,9 @@ const store = createStore({
     },
     getCompletedTodos(state){
       return state.completedTodos;
+    },
+    getPage(state){
+      return state.page
     }
   },
   mutations:{
@@ -33,15 +37,20 @@ const store = createStore({
       state.defaultTodos = Storage.getTodos("defaultTodos");
       state.completedTodos = Storage.getCompletedTodos("defaultTodos");
     },
-    // eslint-disable-next-line no-unused-vars
     removeTodo(state,payload){
       console.log("storedaki",payload.todo);
       Storage.removeTodoFromStorage(payload.type,payload.todo);
       state.defaultTodos = Storage.getTodos("defaultTodos");
       state.completedTodos = Storage.getCompletedTodos("defaultTodos");
-
+    },
+    changeFavStatus(state,payload){
+      Storage.changeFavStatusOfTodo(payload.type,payload.todo);
+      state.defaultTodos = Storage.getTodos("defaultTodos");
+      state.completedTodos = Storage.getCompletedTodos("defaultTodos");
+    },
+    changePageContent(state,payload){
+      state.page = payload;
     }
-
   }
 });
 export default store;
