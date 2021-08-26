@@ -4,7 +4,7 @@ A microsoft-todo-clone. I have developed this project without any css framework.
 # Live demo (firebase)
 https://todo-c518f.web.app/#
 
-# Giph
+# Gif
 ![Alt Text](https://media.giphy.com/media/EloK5affruM9NQzQvZ/giphy.gif)
 
 
@@ -12,7 +12,7 @@ https://todo-c518f.web.app/#
 
 
 # Technologies
-HTML&CSS,Vue.js, firebase
+HTML&CSS,Vue.js
 
 
 # Status
