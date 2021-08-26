@@ -12,7 +12,7 @@ https://todo-c518f.web.app/#
 
 
 # Technologies
-HTML&CSS,Vue.js, firebase
+HTML&CSS,Vue.js
 
 
 # Status
