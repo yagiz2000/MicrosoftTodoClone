@@ -403,16 +403,14 @@ export default {
 .main .content .top-info .options a{
     color: white;
     text-decoration: none;
-    background: #4559aa;
-    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-    backdrop-filter: blur( 0.0px );
-    -webkit-backdrop-filter: blur( 0.0px );
+background-color: rgb(255 255 255 / 14%);   
     border-radius: 3px;
     cursor:default;
     border: 1px solid rgba( 255, 255, 255, 0.18 );    
 }
 .main .content .top-info .options .dots{
     padding: 3px;
+    
 }
 .main .content .top-info .options a:hover{
     background-color: #323f75;
