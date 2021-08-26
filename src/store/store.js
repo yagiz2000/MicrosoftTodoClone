@@ -7,6 +7,7 @@ const store = createStore({
       defaultTodos:Storage.getTodos("defaultTodos"),
       completedTodos:Storage.getCompletedTodos("defaultTodos"),
       page:"Günüm",
+      backGroundColor:"#7388DA"
     }
   },
   getters: {
@@ -20,7 +21,10 @@ const store = createStore({
       return state.completedTodos;
     },
     getPage(state){
-      return state.page
+      return state.page;
+    },
+    getBackGroundColor(state){
+      return state.backGroundColor;
     }
   },
   mutations:{
@@ -50,6 +54,17 @@ const store = createStore({
     },
     changePageContent(state,payload){
       state.page = payload;
+    },
+    changeBackGroundColor(state,payload){
+      state.backGroundColor = payload;
+    },
+    setTodosToFavTodos(state){
+      state.defaultTodos = Storage.getFavTodos("defaultTodos");
+      state.completedTodos = Storage.getCompletedTodos("defaultTodos");
+    },
+    setTodosToDefaultTodos(state){
+      state.defaultTodos = Storage.getTodos("defaultTodos");
+      state.completedTodos = Storage.getCompletedTodos("defaultTodos");
     }
   }
 });

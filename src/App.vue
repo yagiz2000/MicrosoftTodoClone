@@ -41,9 +41,7 @@ export default {
   ::-webkit-scrollbar-thumb {
     background: #555; 
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-  }
+ 
 .container{
     position: relative;
     width: 100%;

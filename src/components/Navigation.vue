@@ -30,11 +30,11 @@
                         </ul>
                     </div>
                 </li>
-                <li @click="changeActiveListItem(0,'Günüm')" :style="{'--bgColor':'#7388DA'}" :class="{'active':listNumber ===0}">
+                <li @click="changeActiveListItem(0,'Günüm','#7388DA')" :style="{'--bgColor':'#7388DA'}" :class="{'active':listNumber ===0}">
                     <span class="icon"><i class="fas fa-sun"></i></span>
                     <span class="title">Günüm</span>
                 </li>
-                <li  @click="changeActiveListItem(1,'Önemli')" :style="{'--bgColor':'#D35D58'}" :class="{'active':listNumber ===1}" >
+                <li  @click="changeActiveListItem(1,'Önemli','#D35D58')" :style="{'--bgColor':'#D35D58'}" :class="{'active':listNumber ===1}" >
                     <span class="icon"><i class="fas fa-star"></i></span>
                     <span class="title">Önemli</span>
                 </li>
@@ -70,7 +70,6 @@ import { ref, computed } from 'vue';
  */import {useStore} from "vuex";
 
 export default {
-    
     setup(){
         let showEmailToggle = ref(false);
         const sideBar = ref(null);
@@ -88,9 +87,17 @@ export default {
             console.log("saaaaaaa");
             showEmailToggle.value = false;
         }
-        function changeActiveListItem (num,name){
+        function changeActiveListItem (num,name,colorCode){
             listNumber.value = num;
             store.commit("changePageContent",name);
+            if(name=="Günüm"){
+                store.commit("changeBackGroundColor",colorCode)
+                store.commit("setTodosToDefaultTodos")
+            }
+            if(name==="Önemli"){
+                store.commit("setTodosToFavTodos");
+                store.commit("changeBackGroundColor",colorCode);
+            }
         }
         return{toggleSideBar,sideBar,deger2,navigation,showEmailToggle,openEmailToggler,outsideClickEmailToggler,listNumber,changeActiveListItem}
         

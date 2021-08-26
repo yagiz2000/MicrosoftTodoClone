@@ -45,8 +45,8 @@
                     <div class="days-info">
                         <ul>
                             <li id="responsiveButton"  @click="toggleSideBar()"><i class="fas fa-bars"></i></li>
-                            <li><h3>{{pageHeader}}</h3></li>
-                            <li><p>{{getDay()}}</p></li>
+                            <li><h3><i v-if="pageHeader==='Önemli'" class="far fa-star"></i> {{pageHeader}}</h3></li>
+                            <li v-if="pageHeader=='Günüm'"><p> {{getDay()}}</p></li>
                         </ul>
                     </div>
                     <div class="options">
@@ -216,12 +216,10 @@
 import {computed,ref} from "vue";
 import { useStore } from 'vuex';
 import useMixin from "../mixin/mixin";
-import ClickOutside from 'vue-click-outside'
 export default {
     setup(){
         const {toggle} = useMixin();
         let inputValue = ref("");
-        let backGroundColor = ref("#7388DA")
         let inputStyling = ref("none");
         let showTodos = ref(false);
         let boxIndex = ref(0);
@@ -231,6 +229,7 @@ export default {
         let selectedTodoByRighClk= ref(null);
         let optionsToggleShow = ref(false);
         const store = useStore();
+        let backGroundColor = computed(()=>{return store.getters.getBackGroundColor})
         let defaultTodos = computed(()=>{return store.getters.getDefaultTodos})
         let completedTodos = computed(()=>{return store.getters.getCompletedTodos})
         const deger = computed(()=>{return store.getters.resHamBtn})
@@ -301,9 +300,16 @@ export default {
                 toggleSide.value.style = "display:none";
             }
         }
-        function changeBg(val,boxInd){
-            boxIndex.value = boxInd;
-            backGroundColor.value = val;
+        function changeBg(val,boxInd=null){
+            console.log(!(boxInd==null));
+            if(!(boxInd===null)){
+                console.log("if çalıştı")
+                boxIndex.value = boxInd;
+                store.commit("changeBackGroundColor",val)
+            }
+            else{
+                store.commit("changeBackGroundColor",val);
+            }   
         }
         function normalizePosition(mouseX,mouseY){
             let body = document.querySelector("body");
@@ -318,16 +324,14 @@ export default {
             console.log("mouseX =>",mouseX +contextMenu.clientWidth,"body.width=>",body.clientWidth)
             console.log("outOfX durumu",outOfX);
             if(outOfX){
-                normalisedX = mouseX-250;
+                normalisedX = mouseX-250;//250 represents width of the context menu
             }
             if(outOfY){
-                normalisedY =  mouseY-326;
+                normalisedY =  mouseY-326;//326 represents height of the context menu
             }
             return{normalisedX,normalisedY}
-
         }
         function openContextMenu(todo,e){
-            console.log(todo);
             selectedTodoByRighClk.value = todo;
             e.preventDefault();
             let contextMenu = document.getElementById("context-menu");
@@ -349,13 +353,13 @@ export default {
         }
         function makeItFav(todo){
             let payload={type:"defaultTodos",todo};
-            store.commit("changeFavStatus",payload)
+            store.commit("changeFavStatus",payload);
+            if(pageHeader.value =="Önemli"){
+                store.commit("setTodosToFavTodos");
+            }
         }
         return{toggleSideBar,deger,toggle,inputValue,showInputLabels,inputStyling,showCompletedTodos,showTodos,toggleOutside,addTodo,defaultTodos,changeCompletedStatus,completedTodos,getDay,openToggleMenu,toggleMenu,toggleSide,toggleSideShow,opentToggleSideMenu,changeBg,backGroundColor,boxIndex,openContextMenu,closeContext,removeTodo,selectedTodoByRighClk,makeItFav,pageHeader}
     },
-    directives:{
-        ClickOutside
-    }
 }
 </script>
 
@@ -591,7 +595,7 @@ export default {
     align-self: flex-start;
     left: 10%;
     margin-top: 10px;
-    background-color: #6175C7;
+    background-color: rgb(255 255 255 / 14%);
     color: white;
     border-radius: 5px;
     height:35px;
@@ -763,6 +767,7 @@ export default {
 }
 .main .content .bottom .input #mainInput{
     z-index: 10000;
+    background-color: rgb(255 255 255 / 14%);
 }
 .main .content .bottom .input .container {
     z-index:100000;
@@ -805,6 +810,7 @@ export default {
 .main .content .bottom .input .liste{
     display: inline-block;
     position: relative;
+    background-color: rgb(255 255 255 / 14%);
     z-index: 10000;
 }
 .main .content .bottom .input .liste ul li{
