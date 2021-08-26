@@ -303,7 +303,6 @@ export default {
         function changeBg(val,boxInd=null){
             console.log(!(boxInd==null));
             if(!(boxInd===null)){
-                console.log("if çalıştı")
                 boxIndex.value = boxInd;
                 store.commit("changeBackGroundColor",val)
             }
@@ -314,15 +313,12 @@ export default {
         function normalizePosition(mouseX,mouseY){
             let body = document.querySelector("body");
             let main = document.querySelector(".main");
-            let contextMenu = document.getElementById("context-menu");
             let normalisedX;
             let normalisedY;
             let outOfX = mouseX+ 250>body.clientWidth;
             let outOfY = mouseY+326>main.clientHeight;
             normalisedX = mouseX;
             normalisedY = mouseY;
-            console.log("mouseX =>",mouseX +contextMenu.clientWidth,"body.width=>",body.clientWidth)
-            console.log("outOfX durumu",outOfX);
             if(outOfX){
                 normalisedX = mouseX-250;//250 represents width of the context menu
             }
@@ -403,14 +399,13 @@ export default {
 .main .content .top-info .options a{
     color: white;
     text-decoration: none;
-background-color: rgb(255 255 255 / 14%);   
+    background-color: rgb(255 255 255 / 14%);   
     border-radius: 3px;
     cursor:default;
     border: 1px solid rgba( 255, 255, 255, 0.18 );    
 }
 .main .content .top-info .options .dots{
     padding: 3px;
-    
 }
 .main .content .top-info .options a:hover{
     background-color: #323f75;
