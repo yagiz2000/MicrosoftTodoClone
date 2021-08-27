@@ -116,7 +116,7 @@
                                 <div class="infoSection">
                                     <div class="circle">
                                         <label class="container" style="z-index:1000000">
-                                            <input type="checkbox" @click="changeCompletedStatus(i)" :checked="todo.completed">
+                                            <input type="checkbox" @click="changeCompletedStatus(i,todo)" :checked="todo.completed">
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
@@ -208,6 +208,7 @@
                         </div>
                     </div>
                 </div>
+               
             </div>
         </div>
 </template>
@@ -278,7 +279,15 @@ export default {
         }
         function changeCompletedStatus(index,todo){
             let payload = {index,type:"defaultTodos",todo}
-            store.commit("changeCompletedStatus",payload);
+            console.l
+            if(pageHeader.value=="Önemli"){
+                store.commit("changeCompletedStatus",payload);
+                store.commit("setTodosToFavTodos")
+            }
+            else{
+                store.commit("changeCompletedStatus",payload);
+                store.commit("setTodosToDefaultTodos")
+            }
         }
         function openToggleMenu(){
             if(!optionsToggleShow.value){
@@ -370,6 +379,10 @@ export default {
 
 .main .content{
     position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .main .content .top-info{
     display: flex;
@@ -578,8 +591,10 @@ export default {
     justify-content: flex-start;
     align-items:center;
     top:108.8px ;
-    height: calc(100vh - 106.4px);
-}
+    height: 100%;
+/*     height: calc(100vh - 106.4px);
+ */
+ }
 .main .content .middle .completed{
     cursor: pointer;
     position: relative;
@@ -750,12 +765,15 @@ export default {
     top: -10px;
     left: 30px;
 }
+.main .content .bottom{
+    width: 100%;
+    margin-bottom: 30px;
+}
 .main .content .bottom .input{
     pointer-events: none;
     display: flex;
-    position: absolute;
+    position: relative;
     left: 10%;
-    top: 90%;
     width: 80%;
 }
 .main .content .bottom .input #mainInput{
@@ -953,6 +971,9 @@ export default {
         background-color:#4559aa ;
         padding: 3px;
 
+    }
+    .main .content .top-info .options{
+        align-self: flex-end;
     }
 
 }

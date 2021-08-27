@@ -38,8 +38,6 @@ const store = createStore({
     },
     changeCompletedStatus(state,payload){
       Storage.changeCompletedStatus(payload.type,payload.index,payload.todo);
-      state.defaultTodos = Storage.getTodos("defaultTodos");
-      state.completedTodos = Storage.getCompletedTodos("defaultTodos");
     },
     removeTodo(state,payload){
       console.log("storedaki",payload.todo);

@@ -36,7 +36,7 @@ export default {
     width: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: #7388DA; 
+    background: transparent; 
   }
   ::-webkit-scrollbar-thumb {
     background: #555; 

@@ -28,18 +28,21 @@ export class Storage{
     static changeCompletedStatus(type,index,todo=null){
         let currentTodoList = this.getTodos(type);
         if(todo==null){
+            console.log("changeCompleted statıs null if")
             let todo = currentTodoList[index];
             todo.completed = !todo.completed;
             localStorage.setItem(type,JSON.stringify(currentTodoList));
             this.getTodos(type);
         }
         else{
+            console.log("changeCompleted statıs else")
             let changedTodo = currentTodoList.find((item)=>{
                 return item.createdAt === todo.createdAt;
             })
+            console.log(changedTodo);
             currentTodoList.forEach((item)=>{
                 if(item==changedTodo){
-                    item.completed = false;
+                    item.completed = !item.completed;
                 }
             })
             localStorage.setItem(type,JSON.stringify(currentTodoList));
