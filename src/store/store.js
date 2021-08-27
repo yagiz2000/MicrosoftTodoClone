@@ -37,8 +37,15 @@ const store = createStore({
     },
     // eslint-disable-next-line no-unused-vars
     addTodos(state,payload){
-      Storage.addTodos("defaultTodos",payload);
-       state.defaultTodos = Storage.getTodos("defaultTodos") 
+      if(state.page =="Önemli"){
+        payload.isFav = true;
+          Storage.addTodos("defaultTodos",payload);
+          state.defaultTodos = Storage.getFavTodos();
+      }else{
+        Storage.addTodos("defaultTodos",payload);
+        state.defaultTodos = Storage.getTodos("defaultTodos")
+      }
+      
     },
     changeCompletedStatus(state,payload){
       Storage.changeCompletedStatus(payload.type,payload.index,payload.todo);

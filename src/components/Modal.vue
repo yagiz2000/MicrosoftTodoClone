@@ -73,7 +73,7 @@ export default {
     background: white;
     border-radius: 5px;
     padding: 10px;
-    z-index: 100000000;
+    z-index: 200000000000000;
 }
 .modal-btn{
     cursor: pointer;

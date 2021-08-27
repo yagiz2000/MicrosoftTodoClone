@@ -23,7 +23,6 @@ export class Storage{
         let todos = this.getTodos(type);
         todos.push(data);
         localStorage.setItem(type,JSON.stringify(todos));
-        this.getTodos(type);
     }
     static changeCompletedStatus(type,index,todo=null){
         let currentTodoList = this.getTodos(type);
