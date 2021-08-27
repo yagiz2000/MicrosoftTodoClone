@@ -14,8 +14,7 @@ export default {
   setup(){
     const store = useStore();
     let deger = computed(()=>{return store.getters.resHamBtn});
-    let clickHamBtn = computed(()=>{return store.getters.isHamBtnClicked})
-    return{deger,clickHamBtn}
+    return{deger}
   },
 
   components:{

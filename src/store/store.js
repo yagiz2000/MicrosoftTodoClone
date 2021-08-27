@@ -7,7 +7,8 @@ const store = createStore({
       defaultTodos:Storage.getTodos("defaultTodos"),
       completedTodos:Storage.getCompletedTodos("defaultTodos"),
       page:"Günüm",
-      backGroundColor:"#7388DA"
+      backGroundColor:"#7388DA",
+      showModal:false
     }
   },
   getters: {
@@ -25,6 +26,9 @@ const store = createStore({
     },
     getBackGroundColor(state){
       return state.backGroundColor;
+    },
+    getShowModal(state){
+      return state.showModal;
     }
   },
   mutations:{
@@ -40,7 +44,6 @@ const store = createStore({
       Storage.changeCompletedStatus(payload.type,payload.index,payload.todo);
     },
     removeTodo(state,payload){
-      console.log("storedaki",payload.todo);
       Storage.removeTodoFromStorage(payload.type,payload.todo);
       state.defaultTodos = Storage.getTodos("defaultTodos");
       state.completedTodos = Storage.getCompletedTodos("defaultTodos");
@@ -63,6 +66,9 @@ const store = createStore({
     setTodosToDefaultTodos(state){
       state.defaultTodos = Storage.getTodos("defaultTodos");
       state.completedTodos = Storage.getCompletedTodos("defaultTodos");
+    },
+    changeShowModal(state){
+      state.showModal = !state.showModal;
     }
   }
 });

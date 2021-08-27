@@ -2,6 +2,7 @@
 /* eslint-disable no-empty */
 <template>
   <div class="main" :style="{'--mainBgColor':backGroundColor}" @click="toggleOutside">
+      <Modal v-if="showModal" :todo="selectedTodoByRighClk" />
             <div class="content" @click="closeContext" >
                 <div id="context-menu" >
                     <div class="item">
@@ -168,7 +169,7 @@
                     </div>
                     <div v-if="defaultTodos.length===0" class="icon">
                         <div class="icon-pic">
-                            <img src="../assets/calendarAndSun.png" alt="">
+                           <svg id="calendar"  enable-background="new 0 0 512 512" height="200" viewBox="0 0 512 512" width="200" xmlns="http://www.w3.org/2000/svg"><g><path d="m409.6 512h68.267c18.851 0 34.133-15.282 34.133-34.133v-331.754h-102.4z" fill="#cadae6"/><g><path d="m477.867 434.393c-4.267 0-7.726-3.459-7.726-7.726v-273.067c0-4.267 3.459-7.726 7.726-7.726s7.726 3.459 7.726 7.726v273.066c0 4.268-3.459 7.727-7.726 7.727z" fill="#b4cadb"/></g><path d="m409.6 153.6h102.4v-85.334c0-18.851-15.282-34.132-34.133-34.132h-68.267z" fill="#db4955"/><path d="m512 111.74h-68.267c-4.267 0-7.726 3.459-7.726 7.726s3.459 7.726 7.726 7.726h68.267z" fill="#c7424d"/><path d="m34.134 477.867c0 18.851 15.282 34.133 34.132 34.133h341.334c18.851 0 34.133-15.282 34.133-34.133v-34.134z" fill="#b4cadb"/><path d="m34.134 146.113v297.621l375.467 34.132c18.851 0 34.132-15.282 34.132-34.132v-297.621z" fill="#eef1f3"/><path d="m443.733 153.6v-85.334c0-18.851-15.282-34.132-34.132-34.132h-68.267-204.8-68.268c-18.851 0-34.132 15.281-34.132 34.132v85.334z" fill="#dd646e"/><path d="m32.692 477.867c-14.877 0-27.53-9.517-32.205-22.795-1.949-5.537 2.197-11.338 8.068-11.338h359.242c4.053 0 7.546 2.853 8.352 6.826 3.162 15.58 16.937 27.308 33.451 27.308h-376.908z" fill="#cadae6"/><g><g><path d="m136.533 75.993h-17.066c-4.267 0-7.726-3.459-7.726-7.726s3.459-7.726 7.726-7.726h17.066c4.267 0 7.726 3.459 7.726 7.726s-3.459 7.726-7.726 7.726z" fill="#db4955"/></g></g><g><g><path d="m187.734 75.993h-17.067c-4.267 0-7.726-3.459-7.726-7.726s3.459-7.726 7.726-7.726h17.067c4.267 0 7.726 3.459 7.726 7.726s-3.459 7.726-7.726 7.726z" fill="#db4955"/></g></g><g><g><g><path d="m307.2 75.993h-17.067c-4.267 0-7.726-3.459-7.726-7.726s3.459-7.726 7.726-7.726h17.067c4.267 0 7.726 3.459 7.726 7.726s-3.459 7.726-7.726 7.726z" fill="#db4955"/></g></g></g><g><g><path d="m358.4 75.993h-17.066c-4.267 0-7.726-3.459-7.726-7.726s3.459-7.726 7.726-7.726h17.066c4.267 0 7.726 3.459 7.726 7.726s-3.459 7.726-7.726 7.726z" fill="#db4955"/></g></g><path d="m136.533 68.267c0 9.426 7.641 17.067 17.067 17.067s17.067-7.641 17.067-17.067v-51.2c0-9.426-7.641-17.067-17.067-17.067s-17.067 7.641-17.067 17.067z" fill="#f4de7f"/><path d="m307.2 68.267c0 9.426 7.641 17.067 17.067 17.067s17.067-7.641 17.067-17.067v-51.2c-.001-9.426-7.642-17.067-17.067-17.067-9.426 0-17.067 7.641-17.067 17.067z" fill="#f4de7f"/><path d="m34.134 111.74h409.599v15.453h-409.599z" fill="#db4955"/><g><circle cx="238.933" cy="307.2" fill="#f4de7f" r="51.2"/><g><path d="m238.933 229.593c-4.267 0-7.726-3.459-7.726-7.726v-17.067c0-4.267 3.459-7.726 7.726-7.726s7.726 3.459 7.726 7.726v17.067c.001 4.267-3.459 7.726-7.726 7.726z" fill="#f0c078"/></g><g><path d="m178.594 254.587c-1.977 0-3.955-.755-5.463-2.263l-12.068-12.068c-3.018-3.017-3.018-7.909 0-10.926 3.017-3.017 7.91-3.017 10.927 0l12.068 12.068c3.018 3.017 3.018 7.909 0 10.927-1.51 1.507-3.487 2.262-5.464 2.262z" fill="#f0c078"/></g><g><path d="m153.6 314.927h-17.067c-4.267 0-7.726-3.459-7.726-7.726s3.459-7.726 7.726-7.726h17.067c4.267 0 7.726 3.459 7.726 7.726s-3.459 7.726-7.726 7.726z" fill="#f0c078"/></g><g><path d="m166.526 387.334c-1.977 0-3.955-.755-5.463-2.263-3.018-3.017-3.018-7.91 0-10.927l12.068-12.068c3.017-3.017 7.909-3.017 10.927 0s3.018 7.91 0 10.927l-12.068 12.068c-1.51 1.508-3.487 2.263-5.464 2.263z" fill="#f0c078"/></g><g><path d="m238.933 417.327c-4.267 0-7.726-3.459-7.726-7.726v-17.067c0-4.267 3.459-7.726 7.726-7.726s7.726 3.459 7.726 7.726v17.066c.001 4.267-3.459 7.727-7.726 7.727z" fill="#f0c078"/></g><g><path d="m311.341 387.334c-1.977 0-3.955-.755-5.463-2.263l-12.068-12.068c-3.018-3.017-3.018-7.909 0-10.927 3.017-3.017 7.91-3.017 10.927 0l12.068 12.068c3.018 3.017 3.018 7.909 0 10.927-1.509 1.508-3.486 2.263-5.464 2.263z" fill="#f0c078"/></g><g><path d="m341.334 314.927h-17.067c-4.267 0-7.726-3.459-7.726-7.726s3.459-7.726 7.726-7.726h17.067c4.267 0 7.726 3.459 7.726 7.726s-3.459 7.726-7.726 7.726z" fill="#f0c078"/></g><g><path d="m299.273 254.587c-1.978 0-3.955-.755-5.463-2.263-3.018-3.017-3.018-7.91 0-10.927l12.068-12.068c3.017-3.017 7.909-3.017 10.926 0 3.018 3.017 3.018 7.909 0 10.926l-12.068 12.068c-1.508 1.509-3.485 2.264-5.463 2.264z" fill="#f0c078"/></g><path d="m238.933 256c-4.08 0-8.043.491-11.847 1.393 22.562 5.348 39.353 25.61 39.353 49.807s-16.791 44.46-39.353 49.807c3.804.902 7.767 1.393 11.847 1.393 28.277 0 51.2-22.923 51.2-51.2.001-28.277-22.923-51.2-51.2-51.2z" fill="#f0c078"/></g></g></svg>
                         </div>
                         <div class="icon-title">
                             <h3>Gününüze Odaklanın</h3>
@@ -217,6 +218,7 @@
 import {computed,ref} from "vue";
 import { useStore } from 'vuex';
 import useMixin from "../mixin/mixin";
+import Modal from "../components/Modal.vue";
 export default {
     setup(){
         const {toggle} = useMixin();
@@ -230,10 +232,10 @@ export default {
         let selectedTodoByRighClk= ref(null);
         let optionsToggleShow = ref(false);
         const store = useStore();
+        let showModal = computed(()=>{return store.getters.getShowModal});
         let backGroundColor = computed(()=>{return store.getters.getBackGroundColor})
         let defaultTodos = computed(()=>{return store.getters.getDefaultTodos})
         let completedTodos = computed(()=>{return store.getters.getCompletedTodos})
-        const deger = computed(()=>{return store.getters.resHamBtn})
         let pageHeader = computed(()=>{return store.getters.getPage})
         function getDay(){
             let days = ["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
@@ -353,8 +355,10 @@ export default {
             }
         }
         function removeTodo(){
-            let payload={type:"defaultTodos",todo:selectedTodoByRighClk.value};
-            store.commit("removeTodo",payload);
+            store.commit("changeShowModal");
+            let contextMenu = document.getElementById("context-menu");
+            contextMenu.classList.remove("visible");
+
         }
         function makeItFav(todo){
             let payload={type:"defaultTodos",todo};
@@ -363,8 +367,11 @@ export default {
                 store.commit("setTodosToFavTodos");
             }
         }
-        return{toggleSideBar,deger,toggle,inputValue,showInputLabels,inputStyling,showCompletedTodos,showTodos,toggleOutside,addTodo,defaultTodos,changeCompletedStatus,completedTodos,getDay,openToggleMenu,toggleMenu,toggleSide,toggleSideShow,opentToggleSideMenu,changeBg,backGroundColor,boxIndex,openContextMenu,closeContext,removeTodo,selectedTodoByRighClk,makeItFav,pageHeader}
+        return{toggleSideBar,toggle,inputValue,showInputLabels,inputStyling,showCompletedTodos,showTodos,toggleOutside,addTodo,defaultTodos,changeCompletedStatus,completedTodos,getDay,openToggleMenu,toggleMenu,toggleSide,toggleSideShow,opentToggleSideMenu,changeBg,backGroundColor,boxIndex,openContextMenu,closeContext,removeTodo,selectedTodoByRighClk,makeItFav,pageHeader,showModal}
     },
+    components:{
+        Modal
+    }
 }
 </script>
 
@@ -608,7 +615,7 @@ export default {
     border-radius: 5px;
     height:35px;
     min-height: 35px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     width: 140px;
     padding: 5px;
 }
@@ -663,6 +670,7 @@ export default {
     margin-top: 10px;
     font-size: 1.2em;
     text-align: center;
+    margin-top: 25px;
     letter-spacing: 1.5px;
 }
 .main .content .middle .icon .icon-subtitle{
