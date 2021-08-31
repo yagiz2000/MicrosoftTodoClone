@@ -8,7 +8,8 @@ const store = createStore({
       completedTodos:Storage.getCompletedTodos("defaultTodos"),
       page:"Günüm",
       backGroundColor:"#7388DA",
-      showModal:false
+      showModal:false,
+      calendarShow:false
     }
   },
   getters: {
@@ -29,6 +30,9 @@ const store = createStore({
     },
     getShowModal(state){
       return state.showModal;
+    },
+    getCalendarShow(state){
+      return state.calendarShow;
     }
   },
   mutations:{
@@ -76,6 +80,9 @@ const store = createStore({
     },
     changeShowModal(state){
       state.showModal = !state.showModal;
+    },
+    changeCalendarShow(state){
+      state.calendarShow = !state.calendarShow;
     }
   }
 });

@@ -2,6 +2,7 @@
 /* eslint-disable no-empty */
 <template>
   <div class="main" :style="{'--mainBgColor':backGroundColor}" @click="toggleOutside">
+      <Calendar/>
       <Modal v-if="showModal"  :todo="selectedTodoByRighClk" />
       <div id="overlay" :class="{'active':showModal}"></div>
             <div class="content" @click="closeContext" >
@@ -190,16 +191,39 @@
                             <span id="vertical"></span>
                             <span id="horizontal"></span>
                         </div>
-                        <input id="mainInput" @keyup.enter="addTodo" @change="showInputLabels" v-model="inputValue" placeholder="Görev ekle" type="text">
+                        <input id="mainInput" @keyup.enter="addTodo" v-model="inputValue" placeholder="Görev ekle" type="text">
                         <div class="liste">
                             <ul id="msgInputList"  :style="{display:inputStyling}">
                                 <li>
                                     <span class="icon"><i class="fas fa-home"></i></span>
                                     <span class="text">Görevler </span>
                                 </li>
-                                <li>
-                                    <span class="icon"><i class="far fa-calendar-alt"></i></span>
+                                <li @click="openCalendarOption">
+                                    <span class="icon" ><i class="far fa-calendar-alt"></i></span>
                                 </li>
+                                <div class="calendar-menu">
+                                    <div class="calendar-option">
+                                        <span class="icon"><i class="far fa-calendar"></i></span>
+                                        <span class="text">Bugün</span>
+                                        <span class="day-text">Sal</span>
+                                    </div>
+                                    <div class="calendar-option">
+                                        <span class="icon"><i class="fas fa-calendar-day"></i></span>
+                                        <span class="text">Yarın</span>
+                                        <span class="day-text">Çarş</span>
+                                    </div>
+                                    <div class="calendar-option">
+                                        <span class="icon"><i class="fas fa-calendar-week"></i></span>
+                                        <span class="text">Gelecek hafta</span>
+                                        <span class="day-text">Pzt</span>
+                                    </div>
+                                    <hr>
+                                    <div class="calendar-option" @click="openCalendar" >
+                                        <span class="icon"><i class="far fa-calendar-alt"></i></span>
+                                        <span class="text">Tarih seçin</span>
+                                        <span class="day-text"></span>
+                                    </div>
+                                </div>
                                 <li>
                                     <span class="icon"><i class="far fa-clock"></i></span>
                                 </li>
@@ -216,10 +240,11 @@
 </template>
 
 <script>
-import {computed,ref} from "vue";
+import {computed,ref,watch} from "vue";
 import { useStore } from 'vuex';
 import useMixin from "../mixin/mixin";
 import Modal from "../components/Modal.vue";
+import Calendar from "../components/Calendar.vue";
 export default {
     setup(){
         const {toggle} = useMixin();
@@ -238,6 +263,14 @@ export default {
         let defaultTodos = computed(()=>{return store.getters.getDefaultTodos})
         let completedTodos = computed(()=>{return store.getters.getCompletedTodos})
         let pageHeader = computed(()=>{return store.getters.getPage})
+        watch(inputValue,(newVal)=>{
+            if(newVal==""){
+                inputStyling.value="none"
+            }
+            else{
+                inputStyling.value = "flex"
+            }
+        })
         function getDay(){
             let days = ["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
             let months = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"]
@@ -251,14 +284,6 @@ export default {
         function toggleSideBar(){
             var navigation = document.querySelector(".navigation");
             navigation.classList += " active";
-        }
-        function showInputLabels(){
-            if(inputValue.value!==""){
-                inputStyling.value="flex";
-            }
-            else{
-                inputStyling.value = "none";
-            }
         }
         function showCompletedTodos(){
             showTodos.value = !showTodos.value;
@@ -357,8 +382,12 @@ export default {
         }
         function closeContext(e){
             let contextMenu = document.getElementById("context-menu");
+            let calendarMenu = document.querySelector(".calendar-menu");
             if(e.target.offsetParent!==contextMenu){
                 contextMenu.classList.remove("visible");
+            }
+            if(e.target.offsetParent!==calendarMenu){
+                contextMenu.classList.remove('visible')
             }
         }
         function removeTodo(){
@@ -374,10 +403,23 @@ export default {
                 store.commit("setTodosToFavTodos");
             }
         }
-        return{toggleSideBar,toggle,inputValue,showInputLabels,inputStyling,showCompletedTodos,showTodos,toggleOutside,addTodo,defaultTodos,changeCompletedStatus,completedTodos,getDay,openToggleMenu,toggleMenu,toggleSide,toggleSideShow,opentToggleSideMenu,changeBg,backGroundColor,boxIndex,openContextMenu,closeContext,removeTodo,selectedTodoByRighClk,makeItFav,pageHeader,showModal}
+        function openCalendarOption(){
+            let calendarMenu = document.querySelector(".calendar-menu");
+            console.log(calendarMenu)
+            calendarMenu.classList.add("visible");   
+        }
+     
+        function openCalendar(){
+            let calendarMenu = document.querySelector(".calendar-menu");
+            calendarMenu.classList.remove('visible');
+            store.commit("changeCalendarShow");
+
+        }
+        return{toggleSideBar,toggle,inputValue,inputStyling,showCompletedTodos,showTodos,toggleOutside,addTodo,defaultTodos,changeCompletedStatus,completedTodos,getDay,openToggleMenu,toggleMenu,toggleSide,toggleSideShow,opentToggleSideMenu,changeBg,backGroundColor,boxIndex,openContextMenu,closeContext,removeTodo,selectedTodoByRighClk,makeItFav,pageHeader,showModal,openCalendarOption,openCalendar}
     },
     components:{
-        Modal
+        Modal,
+        Calendar
     }
 }
 </script>
@@ -590,13 +632,6 @@ export default {
     font-size: 1.2em;
     padding: 2px;
 }
-.main .content .top-info .options a{
-
-}
-
-
-
-
 
 .main .content .middle {
     overflow-y: auto;
@@ -785,7 +820,6 @@ export default {
     margin-bottom: 30px;
 }
 .main .content .bottom .input{
-    pointer-events: none;
     display: flex;
     position: relative;
     left: 10%;
@@ -834,22 +868,62 @@ export default {
     background-color: white;
 }
 .main .content .bottom .input .liste{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     display: inline-block;
     position: relative;
     background-color: rgb(255 255 255 / 14%);
-    z-index: 10000;
+    z-index: 0;
 }
 .main .content .bottom .input .liste ul{
         background-color: rgb(255 255 255 / 14%);
- border-top-right-radius: 5px;
+        border-top-right-radius: 5px;
         border-bottom-right-radius: 5px;
+}
+.main .content .bottom .input .liste ul .calendar-menu{
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    position: absolute;
+    bottom:100%;
+    width:200px;
+    padding: 10px;
+    height: 0px;
+    background-color: white;
+    visibility: hidden;
+}
+.main .content .bottom .input .liste ul .calendar-menu.visible{
+    visibility: visible;
+    height: 142px;
+    transition: height  0.5s;
+
+}
+.main .content .bottom .input .liste ul .calendar-menu .calendar-option{
+    color: black;
+    position: relative;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+.main .content .bottom .input .liste ul .calendar-menu .calendar-option .text{
+    margin-left: 20px;
+}
+.main .content .bottom .input .liste ul .calendar-menu .calendar-option .day-text{
+    position: absolute;
+    right: 5px;
+}
+.main .content .bottom .input .liste ul .calendar-menu .calendar-option:hover{
+    background-color: #EEEEEE;
+}
+.main .content .bottom .input .liste ul li{
+    cursor: pointer;
 }
 .main .content .bottom .input .liste ul li:last-child{
             border-top-right-radius: 5px;
         border-bottom-right-radius: 5px;
 }
 .main .content .bottom .input .liste ul li:hover{
-    background: chartreuse;
+  background-color: rgba(119, 119, 119, 0.5);
     
 }
 
