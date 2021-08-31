@@ -382,7 +382,7 @@ export default {
         }
         function closeContext(e){
             let contextMenu = document.getElementById("context-menu");
-            let calendarMenu = document.querySelector(".calendar-menu");
+            let calendarMenu = document.querySelector(".calendar-menu.visible");
             if(e.target.offsetParent!==contextMenu){
                 contextMenu.classList.remove("visible");
             }
@@ -736,10 +736,12 @@ export default {
     align-items: center;
     background-color: white;
     width: 100%;
-    height: 60px;
+    height: auto;
 }
 .main .content .middle ul li .todo .infoSection .text{
     left: 44px;
+    width: 80%;
+    overflow-wrap:anywhere;
 }
 .main .content .middle ul li .todo .infoSection .text p.done{
     text-decoration: line-through;
@@ -753,7 +755,7 @@ export default {
     background-color: #EEEEEE;
 }
 .main .content .middle ul li .todo .infoSection{
-    width: 20%;
+    width: 100%;
     align-items: center;
     justify-content: space-between;
 
