@@ -726,12 +726,12 @@ export default {
     width: 80%;
 }
 .main .content .middle ul li {
-    margin-top: 5px;
+    margin-top: 3px;
 }
 .main .content .middle ul li .todo{
     display: flex;
     border-radius: 5px;
-    padding: 10px;
+    padding: 0px 20px;
     justify-content: space-between;
     align-items: center;
     background-color: white;
@@ -906,6 +906,7 @@ export default {
     height: 30px;
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 .main .content .bottom .input .liste ul .calendar-menu .calendar-option .text{
     margin-left: 20px;

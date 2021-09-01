@@ -75,6 +75,9 @@ export default {
     padding: 10px;
     z-index: 200000000000000;
 }
+.modal .content{
+    overflow-wrap: anywhere;
+}
 .modal-btn{
     cursor: pointer;
     border: none;
