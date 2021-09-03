@@ -2,6 +2,8 @@
 /* eslint-disable no-empty */
 <template>
   <div class="main" :style="{'--mainBgColor':backGroundColor}" @click="toggleOutside">
+      <clock-options-menu></clock-options-menu>
+      <scroll-date-selector></scroll-date-selector>
       <Calendar/>
       <Modal v-if="showModal"  :todo="selectedTodoByRighClk" />
       <div id="overlay" :class="{'active':showModal}"></div>
@@ -245,6 +247,8 @@ import { useStore } from 'vuex';
 import useMixin from "../mixin/mixin";
 import Modal from "../components/Modal.vue";
 import Calendar from "../components/Calendar.vue";
+import ScrollDateSelector from "../components/ScrollDateSelector.vue";
+import ClockOptionsMenu from "../components/ClockOptionsMenu.vue";
 export default {
     setup(){
         const {toggle} = useMixin();
@@ -419,7 +423,9 @@ export default {
     },
     components:{
         Modal,
-        Calendar
+        Calendar,
+        ScrollDateSelector,
+        ClockOptionsMenu
     }
 }
 </script>

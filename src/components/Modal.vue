@@ -5,7 +5,7 @@
           <h2>Görevi sil</h2>
       </div>
       <div class="content" >
-          <p>{{todoy.content}} kalıcı olarak silinecek"</p>
+          <p>"{{todoy.content}}" kalıcı olarak silinecek"</p>
       </div>
       <div class="buttons" style="align-self:center">
           <button class="modal-btn" @click="handleModal('delete')" id="deleteBtn">Sil</button>

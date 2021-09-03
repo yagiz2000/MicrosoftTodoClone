@@ -161,6 +161,7 @@ export default {
     border:1px;
     width:30px;
     height: 30px;
+    margin: 1.5px;
 }
 .day-num:hover{
     border: 2px solid grey;
