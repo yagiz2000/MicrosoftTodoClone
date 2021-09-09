@@ -1,34 +1,34 @@
 <template>
-<div class="container">
-    <div class="wrapper">
+<div class="container" id="scrollDateContainer">
+    <div class="wrapper" style="margin:0">
       <div class="side" id="left" ref="scrollLeft">     
-          <div class="rects" v-for="(num,i) in  leftNums" :class="{'selected':num==hour}" @click="chooseHour(num)" :key="i">{{num}}</div>
+          <div class="rects" v-for="(num,i) in  leftNums" :class="{'selected':num==hour}" @click="setHour(num)" :key="i">{{num}}</div>
       </div>
-      <hr>
       <div class="side" id="right">
-          <div class="rects" v-for="(num,i) in rightNums" :class="{'selected':num==minute}" @click="chooseMinute(num)" :key="i">{{num}}</div>
+          <div class="rects" v-for="(num,i) in rightNums" :class="{'selected':num==minute}" @click="setMinute(num)" :key="i">{{num}}</div>
       </div>
   </div>
-  <div class="bottom">
-      <div class="hour-wrapper">
-          <div class="hour-side" id="left">10</div>
-          <div class="hour-side" id="right">12</div>
+  <div class="buttons">
+          <div @click="setTodoTime" class="button">
+            <i class="fas fa-check"></i>
+          </div>
+          <div @click="closeScrollDateSelector" class="button">
+              <i class="fas fa-times"></i>
+          </div>
       </div>
-      <div class="buttons">
-          <button class="button" id="cancel">İptal</button>
-          <button class="button" id="save">Kaydet</button>
-      </div>
-  </div>
+  
 </div>
   
 </template>
 
 <script>
 import {/* onMounted, */  ref} from "vue";
+import {useStore} from "vuex";
 
 export default {
     setup(){
         let scrollLeft = ref(null);
+        const store = useStore();
         let hour = ref(null);
         let minute = ref(null);
         let leftNums = ref(generateNumbers(23));
@@ -41,16 +41,19 @@ export default {
                     list.push(difNum);
                 }
                 else{list.push(i);}
-                
             }
             return list;
         }
-        function chooseHour(num){
-            hour.value = num;
+        const setMinute = (min)=> minute.value = min;
+        const setHour = (hourVal)=>hour.value = hourVal;
+        const setTodoTime = ()=>store.commit("setHourAndMinuteForTodo",{hour:hour.value,minute:minute.value});
+
+        function closeScrollDateSelector(){
+            let scrollDate = document.getElementById("scrollDateContainer");
+            scrollDate.classList.remove("visible");
         }
-        function chooseMinute(num){
-            minute.value = num;
-        }
+        
+
         /* onMounted(() => {
             let iHeight = 50;
             (function scrollStop (callback, refresh = 66) {
@@ -83,20 +86,45 @@ export default {
                 console.log(leftNums.value[iPassed], iPassed)
             })
         }) */
-        
-        return{generateNumbers,leftNums,rightNums,scrollLeft,chooseHour,chooseMinute,hour,minute};
+        return{generateNumbers,leftNums,rightNums,scrollLeft,closeScrollDateSelector,setTodoTime,setMinute,hour,minute,setHour};
     }
-    
 }
 </script>
 
 <style scoped>
-.container{
+#scrollDateContainer{
+    position: absolute;
+    top: -200px;
+    left: -25px;
+    display: inline-block;
+    position: absolute;
+    width: auto;
+    z-index: 9999999999999999999;
+    display: none;
+
+}
+#scrollDateContainer.visible{
     display: flex;
     flex-direction: column;
 }
-.container .bottom{
-    margin-left: 20px;
+.buttons{
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+}
+.buttons .button{
+    border-top: 3px solid grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 50px;
+}
+.buttons .button:hover{
+    background-color: #EEEEEE;
+}           
+
+/* .container .bottom{
     width:300px;
     background-color: white;
     display: flex;
@@ -146,11 +174,10 @@ export default {
 }
 .container .bottom .buttons #cancel:hover{
     border: 1px solid black;
-}
+} */
+
 .wrapper{
     display: flex;
-    margin-left: 20px;
-    margin-top: 20px;
     width: 300px;
     height: 350px;
     background-color: white;
@@ -161,6 +188,12 @@ export default {
     overflow-y:scroll;
     overflow-x:hidden;
     scroll-behavior: smooth;
+}
+#left{
+    border-right: 1.5px solid grey;
+}
+#right{
+    border-left: 1.9px solid grey;
 }
 .side::-webkit-scrollbar{
     display: none;

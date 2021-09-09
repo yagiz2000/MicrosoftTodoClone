@@ -27,7 +27,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  
+};
 </script>
 
 <style scoped  lang='scss'>
@@ -38,12 +40,16 @@ hr{
 }
 .options{
     position: absolute;
+    visibility: hidden;
     top:30px;
     right: 80px;
     width: 300px;
     border-radius: 5px;
-    background: white   ;
+    background: white;
+    opacity: 0;
     z-index:200;
+    height: 0px;
+    transition: height 0.6s,opacity 0.6s;
     .option{
         position: relative;
         display: flex;
@@ -60,14 +66,13 @@ hr{
         &:last-child{
             border-bottom-right-radius: 5px;
             border-bottom-left-radius: 5px;
-
         }
         .icon{
             padding-left: 10px;
         }
         .text{
             position: absolute;
-            left: 30px;
+            left: 40px;
             font-family: 'Open Sans', sans-serif;
             font-weight: 600;
             
@@ -79,6 +84,11 @@ hr{
             color: grey;
         }
     }
+}
+.options.active{
+    height: 162px;
+    visibility: visible;
+    opacity: 1;
     
 }
 </style>

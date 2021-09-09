@@ -3,8 +3,7 @@
 <template>
   <div class="main" :style="{'--mainBgColor':backGroundColor}" @click="toggleOutside">
       <clock-options-menu></clock-options-menu>
-      <scroll-date-selector></scroll-date-selector>
-      <Calendar/>
+      <Calendar :type="calendarType"/>
       <Modal v-if="showModal"  :todo="selectedTodoByRighClk" />
       <div id="overlay" :class="{'active':showModal}"></div>
             <div class="content" @click="closeContext" >
@@ -220,7 +219,7 @@
                                         <span class="day-text">Pzt</span>
                                     </div>
                                     <hr>
-                                    <div class="calendar-option" @click="openCalendar" >
+                                    <div class="calendar-option" @click="openCalendar('extended')" >
                                         <span class="icon"><i class="far fa-calendar-alt"></i></span>
                                         <span class="text">Tarih seçin</span>
                                         <span class="day-text"></span>
@@ -247,7 +246,6 @@ import { useStore } from 'vuex';
 import useMixin from "../mixin/mixin";
 import Modal from "../components/Modal.vue";
 import Calendar from "../components/Calendar.vue";
-import ScrollDateSelector from "../components/ScrollDateSelector.vue";
 import ClockOptionsMenu from "../components/ClockOptionsMenu.vue";
 export default {
     setup(){
@@ -261,6 +259,7 @@ export default {
         let toggleSideShow = ref(false);
         let selectedTodoByRighClk= ref(null);
         let optionsToggleShow = ref(false);
+        let calendarType = ref(null);
         const store = useStore();
         let showModal = computed(()=>{return store.getters.getShowModal});
         let backGroundColor = computed(()=>{return store.getters.getBackGroundColor})
@@ -311,7 +310,6 @@ export default {
         }
         function changeCompletedStatus(index,todo){
             let payload = {index,type:"defaultTodos",todo}
-            console.l
             if(pageHeader.value=="Önemli"){
                 store.commit("changeCompletedStatus",payload);
                 store.commit("setTodosToFavTodos")
@@ -380,25 +378,36 @@ export default {
                 contextMenu.style.left=`${normalisedX}px`;
                 setTimeout(()=>{
                 contextMenu.classList.add("visible");
-
                 },300)
-            
         }
         function closeContext(e){
             let contextMenu = document.getElementById("context-menu");
             let calendarMenu = document.querySelector(".calendar-menu.visible");
+            let calendar = document.querySelector(".calendar.visible");            
             if(e.target.offsetParent!==contextMenu){
                 contextMenu.classList.remove("visible");
             }
             if(e.target.offsetParent!==calendarMenu){
-                contextMenu.classList.remove('visible')
+                if(store.getters.getCalendarOptionShow){
+                    if(calendarMenu!==null){
+                        console.log("olmaması gereken yer çalıştı");
+                        calendarMenu.classList.remove('visible');
+                        store.commit("changeCalendarOptionStatus");
+                    }                    
+                }
+            }
+            if(e.target.offsetParent !== calendar){
+                if(calendar!==null){
+                    calendar.classList.remove('visible');
+                    store.commit("changeCalendarOptionStatus");
+                }
+
             }
         }
         function removeTodo(){
             store.commit("changeShowModal");
             let contextMenu = document.getElementById("context-menu");
             contextMenu.classList.remove("visible");
-
         }
         function makeItFav(todo){
             let payload={type:"defaultTodos",todo};
@@ -409,22 +418,24 @@ export default {
         }
         function openCalendarOption(){
             let calendarMenu = document.querySelector(".calendar-menu");
-            console.log(calendarMenu)
+            console.log(calendarMenu);
+            setTimeout(()=> store.commit("changeCalendarOptionStatus"),200)
             calendarMenu.classList.add("visible");   
         }
-     
-        function openCalendar(){
+        function openCalendar(type){
+            calendarType.value = type;
             let calendarMenu = document.querySelector(".calendar-menu");
+            let calendar = document.querySelector(".calendar");
+            setTimeout(()=>{
+                calendar.classList.add("visible");
+            },200)
             calendarMenu.classList.remove('visible');
-            store.commit("changeCalendarShow");
-
         }
-        return{toggleSideBar,toggle,inputValue,inputStyling,showCompletedTodos,showTodos,toggleOutside,addTodo,defaultTodos,changeCompletedStatus,completedTodos,getDay,openToggleMenu,toggleMenu,toggleSide,toggleSideShow,opentToggleSideMenu,changeBg,backGroundColor,boxIndex,openContextMenu,closeContext,removeTodo,selectedTodoByRighClk,makeItFav,pageHeader,showModal,openCalendarOption,openCalendar}
+        return{toggleSideBar,toggle,inputValue,inputStyling,showCompletedTodos,showTodos,toggleOutside,addTodo,defaultTodos,changeCompletedStatus,completedTodos,getDay,openToggleMenu,toggleMenu,toggleSide,toggleSideShow,opentToggleSideMenu,changeBg,backGroundColor,boxIndex,openContextMenu,closeContext,removeTodo,selectedTodoByRighClk,makeItFav,pageHeader,showModal,openCalendarOption,openCalendar,calendarType}
     },
     components:{
         Modal,
         Calendar,
-        ScrollDateSelector,
         ClockOptionsMenu
     }
 }

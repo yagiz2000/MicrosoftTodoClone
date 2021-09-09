@@ -1,5 +1,7 @@
 <template>
-   <div class="calendar" :class="{'visible':calendarStatus}">
+   <div class="calendar" >
+             <scroll-date-selector></scroll-date-selector>
+
             <div class="today">
                 <h3>{{monthString}} {{year}}</h3>
                 <div class="arrows">
@@ -25,9 +27,19 @@
                 (day.number==activeDay &&day.status=='active')?'active':'']">
                 {{day.number}}</div>
             </div>
-            <div class="buttons">
+            <div v-if="type!=='extended'" class="buttons">
                 <button class="button" @click="closeCalendar" id="cancelBtn">İptal</button>
                 <button class="button"  id="saveBtn">Kaydet</button>
+            </div>
+            <div v-if="type==='extended'" class="bottom">
+                <div class="hour-wrapper" @click="openScrollDateSelector">
+                    <div class="hour-side" id="left">{{hour}}</div>
+                    <div class="hour-side" id="right">{{minute}}</div>
+                </div>
+                <div class="buttons">
+                    <button class="button" @click="closeCalendar" id="cancel">İptal</button>
+                    <button class="button" id="save">Kaydet</button>
+                </div>
             </div>
         </div>
 </template>
@@ -35,13 +47,19 @@
 <script>
 import {ref,computed,watch} from "vue";
 import { useStore } from 'vuex';
+import ScrollDateSelector from "../components/ScrollDateSelector.vue";
 
 export default {
+    props:{
+        type:String
+    },
     setup(){
         let date = new Date()
         const store = useStore();
-        console.log(date.getMonth());
-        let year =ref(date.getFullYear()) ;
+        console.log(store.getters.getTodoTime.minuteOfTodo)
+        let year =ref(date.getFullYear());
+        let hour = computed(()=>store.getters.getTodoTime.hourOfTodo);
+        let minute = computed(()=>store.getters.getTodoTime.minuteOfTodo);
         let calendarStatus= computed(()=>store.getters.getCalendarShow)
         let dayz = computed(()=>{return days(thisMonth)});
         let months = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
@@ -50,10 +68,11 @@ export default {
         let activeDay = ref({today,status:"active",month:(date.getMonth()+1)});
         let thisMonth = ref((date.getMonth()+1));//Plus 1 because of indexing
         function closeCalendar(){
-            store.commit("changeCalendarShow");
+            let calendar = document.querySelector(".calendar");
+            store.commit("changeCalendarOptionStatus");
+            calendar.classList.remove("visible");
         }
         watch(thisMonth,(newValue,oldValue)=>{
-            
             if(oldValue=="1"&&newValue=="0"){
                 thisMonth.value = 12;
                 year.value--;
@@ -101,10 +120,16 @@ export default {
             }
           return nowaDays;
         }
-
-    return{days,dayz,today,activeDay,changeActiveDay,changeMonth,thisMonth,monthString,year,calendarStatus,closeCalendar}
+        function openScrollDateSelector(){
+            let scrollDateSelector = document.querySelector("#scrollDateContainer");
+            console.log(scrollDateSelector);
+            scrollDateSelector.classList.add("visible");
+        }
+    return{days,dayz,today,activeDay,changeActiveDay,changeMonth,thisMonth,monthString,year,calendarStatus,closeCalendar,openScrollDateSelector,hour,minute}
+    },
+    components:{
+        ScrollDateSelector,
     }
-
 }
 </script>
 
@@ -194,5 +219,52 @@ export default {
     z-index: 500000001;
     outline-offset: 1.5px;
     color: black;
+}
+.bottom{
+    width:230px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.bottom .hour-wrapper {
+    display: flex;
+    margin-top: 10px;
+    height: 30px;
+    width: 230px;
+    border: 1px solid black;
+    align-items: center;
+    border-radius: 3px;
+}
+.bottom .hour-wrapper #left{
+  border-right: 1px solid rgb(185, 172, 172);
+}
+.bottom .hour-wrapper .hour-side{
+    width: 115px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.bottom .buttons{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    width: 230px;
+}
+.bottom .buttons .button{
+    width: 110px;
+    border: 1px solid transparent;
+    padding: 5px 0;
+    font-size: 15px;   
+}
+.bottom .buttons #save{
+    background-color: blue;
+    border:1px solid blue;
+    color: white;
+}
+.bottom .buttons .button:hover{
+    border: 1px solid black;
+
 }
 </style>

@@ -9,7 +9,11 @@ const store = createStore({
       page:"Günüm",
       backGroundColor:"#7388DA",
       showModal:false,
-      calendarShow:false
+      calendarOptionShow:false,
+      todoTime:{
+        hourOfTodo:10,
+        minuteOfTodo:10
+      }
     }
   },
   getters: {
@@ -31,8 +35,11 @@ const store = createStore({
     getShowModal(state){
       return state.showModal;
     },
-    getCalendarShow(state){
-      return state.calendarShow;
+    getCalendarOptionShow(state){
+      return state.calendarOptionShow;
+    },
+    getTodoTime(state){
+      return state.todoTime;
     }
   },
   mutations:{
@@ -49,7 +56,6 @@ const store = createStore({
         Storage.addTodos("defaultTodos",payload);
         state.defaultTodos = Storage.getTodos("defaultTodos")
       }
-      
     },
     changeCompletedStatus(state,payload){
       Storage.changeCompletedStatus(payload.type,payload.index,payload.todo);
@@ -81,8 +87,14 @@ const store = createStore({
     changeShowModal(state){
       state.showModal = !state.showModal;
     },
-    changeCalendarShow(state){
-      state.calendarShow = !state.calendarShow;
+    changeCalendarOptionStatus(state){
+      state.calendarOptionShow = !state.calendarOptionShow;
+    },
+    setHourAndMinuteForTodo(state,payload){
+      let hour = typeof payload.hour=== "string" ? parseInt(payload.hour) : payload.hour;
+      let minute = typeof payload.minute=== "string" ? parseInt(payload.minute) : payload.minute;
+      state.todoTime.hourOfTodo = hour;
+      state.todoTime.minuteOfTodo = minute;
     }
   }
 });
